@@ -52,7 +52,7 @@ export default function TaskLayout({ children }) {
   return (
     <>
       {/* Top bar — solo en móvil */}
-      <div className="d-flex d-md-none align-items-center justify-content-between px-3 py-2 border-bottom bg-white position-sticky top-0" style={{ zIndex: 1046 }}>
+      <div className="d-flex d-lg-none align-items-center justify-content-between px-3 py-2 border-bottom bg-white position-sticky top-0" style={{ zIndex: 1046 }}>
         <span className="fw-bold">TaskRest</span>
         <button
           className="btn btn-sm btn-outline-secondary"
@@ -66,15 +66,15 @@ export default function TaskLayout({ children }) {
       <div className="d-flex flex-grow-1">
         {/* Backdrop móvil */}
         {sidebarOpen && (
-          <div className="sidebar-backdrop d-md-none" onClick={closeSidebar} />
+          <div className="sidebar-backdrop d-lg-none" onClick={closeSidebar} />
         )}
 
         {/* Sidebar */}
         <aside className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`}>
-          <div className="sidebar-brand d-none d-md-block">TaskRest</div>
+          <div className="sidebar-brand d-none d-lg-block">TaskRest</div>
 
           {/* Cabecera del sidebar en móvil */}
-          <div className="d-flex d-md-none align-items-center justify-content-between px-3 py-3 border-bottom">
+          <div className="d-flex d-lg-none align-items-center justify-content-between px-3 py-3">
             <span className="fw-bold">TaskRest</span>
             <button className="btn-close" onClick={closeSidebar} aria-label="Cerrar menú" />
           </div>
