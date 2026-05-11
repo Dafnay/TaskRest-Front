@@ -20,7 +20,10 @@ export async function register(username, email, fullname, password) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, email, fullname, password })
   })
-  if (!res.ok) throw new Error('Error al registrar')
+  if (!res.ok) {
+    const body = await res.json().catch(() => null)
+    throw new Error(body?.detail ?? 'Error al registrar')
+  }
   return res.json()
 }
 

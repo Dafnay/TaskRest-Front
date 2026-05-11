@@ -35,8 +35,8 @@ export default function Login() {
     setTouched({ username: true, password: true })
     if (!form.username || !form.password) return
     try {
-      await login(form.username, form.password)
-      navigate('/tasks')
+      const user = await login(form.username, form.password)
+      navigate(user.role === 'ADMIN' ? '/categories' : '/tasks')
     } catch (err) {
       setApiError(err.message)
     }
