@@ -8,8 +8,12 @@ function SidebarContent({ currentUser, onLinkClick }) {
 
   return (
     <div className="nav flex-column nav-pills" onClick={onLinkClick}>
-      <NavLink to="/tasks" className={navLinkClass}>Mis Tareas</NavLink>
-      <NavLink to="/tags" className={navLinkClass}>Tags</NavLink>
+      {currentUser?.role !== 'ADMIN' && (
+        <>
+          <NavLink to="/tasks" className={navLinkClass}>Mis Tareas</NavLink>
+          <NavLink to="/tags" className={navLinkClass}>Tags</NavLink>
+        </>
+      )}
       <NavLink to="/categories" className={navLinkClass}>Categorías</NavLink>
     </div>
   )

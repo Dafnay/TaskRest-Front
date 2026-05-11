@@ -9,6 +9,6 @@ export const getTags = async (auth) => {
   }
 }
 export const getTag = (auth, id) => apiFetch(`/tag/${id}`, auth)
-export const createTag = (auth, data) => apiFetch('/tag/', auth, { method: 'POST', body: JSON.stringify(data) })
-export const updateTag = (auth, id, data) => apiFetch(`/tag/${id}`, auth, { method: 'PUT', body: JSON.stringify(data) })
+export const createTag = (auth, name) => apiFetch('/tag/', auth, { method: 'POST', body: name, headers: { 'Content-Type': 'text/plain' } })
+export const updateTag = (auth, id, name) => apiFetch(`/tag/${id}`, auth, { method: 'PUT', body: name, headers: { 'Content-Type': 'text/plain' } })
 export const deleteTag = (auth, id) => apiFetch(`/tag/${id}`, auth, { method: 'DELETE' })

@@ -21,6 +21,7 @@ export function AuthProvider({ children }) {
     const user = { ...userData, authHeader: encoded }
     sessionStorage.setItem('currentUser', JSON.stringify(user))
     setCurrentUser(user)
+    return user
   }
 
   const logout = () => {

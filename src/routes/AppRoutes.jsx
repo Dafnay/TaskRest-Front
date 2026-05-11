@@ -5,10 +5,18 @@ import Register from '../pages/Register'
 import TaskLayout from '../layout/TaskLayout'
 import TasksPage from '../pages/TasksPage'
 import CategoriesPage from '../pages/CategoriesPage'
+import TagsPage from '../pages/TagsPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
   return isAuthenticated ? children : <Navigate to="/login" replace />
+}
+
+function UserOnlyRoute({ children }) {
+  const { isAuthenticated, currentUser } = useAuth()
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (currentUser?.role === 'ADMIN') return <Navigate to="/categories" replace />
+  return children
 }
 
 export default function AppRoutes() {
@@ -19,14 +27,19 @@ export default function AppRoutes() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/tasks" element={
-            <PrivateRoute>
+            <UserOnlyRoute>
               <TaskLayout><TasksPage /></TaskLayout>
-            </PrivateRoute>
+            </UserOnlyRoute>
           } />
           <Route path="/categories" element={
             <PrivateRoute>
               <TaskLayout><CategoriesPage /></TaskLayout>
             </PrivateRoute>
+          } />
+          <Route path="/tags" element={
+            <UserOnlyRoute>
+              <TaskLayout><TagsPage /></TaskLayout>
+            </UserOnlyRoute>
           } />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
