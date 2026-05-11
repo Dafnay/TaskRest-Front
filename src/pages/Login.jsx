@@ -36,7 +36,7 @@ export default function Login() {
     if (!form.username || !form.password) return
     try {
       const user = await login(form.username, form.password)
-      navigate(user.role === 'ADMIN' ? '/categories' : '/tasks')
+      navigate(user.role === 'ADMIN' ? '/users' : '/tasks')
     } catch (err) {
       setApiError(err.message)
     }

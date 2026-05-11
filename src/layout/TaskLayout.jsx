@@ -14,7 +14,11 @@ function SidebarContent({ currentUser, onLinkClick }) {
           <NavLink to="/tags" className={navLinkClass}>Tags</NavLink>
         </>
       )}
+      {currentUser?.role === 'ADMIN' && (
+        <NavLink to="/users" className={navLinkClass}>Usuarios</NavLink>
+      )}
       <NavLink to="/categories" className={navLinkClass}>Categorías</NavLink>
+      
     </div>
   )
 }

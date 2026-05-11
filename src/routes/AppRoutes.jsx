@@ -6,6 +6,7 @@ import TaskLayout from '../layout/TaskLayout'
 import TasksPage from '../pages/TasksPage'
 import CategoriesPage from '../pages/CategoriesPage'
 import TagsPage from '../pages/TagsPage'
+import UsersPage from '../pages/UsersPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -15,7 +16,14 @@ function PrivateRoute({ children }) {
 function UserOnlyRoute({ children }) {
   const { isAuthenticated, currentUser } = useAuth()
   if (!isAuthenticated) return <Navigate to="/login" replace />
-  if (currentUser?.role === 'ADMIN') return <Navigate to="/categories" replace />
+  if (currentUser?.role === 'ADMIN') return <Navigate to="/users" replace />
+  return children
+}
+
+function AdminOnlyRoute({ children }) {
+  const { isAuthenticated, currentUser } = useAuth()
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (currentUser?.role !== 'ADMIN') return <Navigate to="/tasks" replace />
   return children
 }
 
@@ -40,6 +48,11 @@ export default function AppRoutes() {
             <UserOnlyRoute>
               <TaskLayout><TagsPage /></TaskLayout>
             </UserOnlyRoute>
+          } />
+          <Route path="/users" element={
+            <AdminOnlyRoute>
+              <TaskLayout><UsersPage /></TaskLayout>
+            </AdminOnlyRoute>
           } />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

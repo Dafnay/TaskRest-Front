@@ -1,3 +1,5 @@
+/* ─── Variables & base ─────────────────────────────────────────────────────── */
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -50,9 +52,61 @@
   }
 }
 
+/* ─── Reset ────────────────────────────────────────────────────────────────── */
+
 body {
   margin: 0;
 }
+
+p {
+  margin: 0;
+}
+
+/* ─── Typography ───────────────────────────────────────────────────────────── */
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+/* ─── Layout ───────────────────────────────────────────────────────────────── */
 
 #root {
   min-height: 100svh;
@@ -65,6 +119,8 @@ body {
     flex-direction: row;
   }
 }
+
+/* ─── Sidebar ──────────────────────────────────────────────────────────────── */
 
 .sidebar {
   width: 220px;
@@ -101,6 +157,13 @@ body {
   min-width: 0;
 }
 
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1044;
+}
+
 @media (max-width: 991.98px) {
   .sidebar {
     position: fixed;
@@ -118,53 +181,24 @@ body {
   }
 }
 
-.sidebar-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1044;
+/* ─── Buttons ──────────────────────────────────────────────────────────────── */
+
+.btn-outline-purple {
+  color: #6f42c1;
+  border-color: #6f42c1;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
+/* Small outline buttons: solid by default, outline on hover */
+.btn.btn-sm.btn-outline-primary    { background-color: #0d6efd; color: #fff;    border-color: #0d6efd; }
+.btn.btn-sm.btn-outline-success    { background-color: #198754; color: #fff;    border-color: #198754; }
+.btn.btn-sm.btn-outline-danger     { background-color: #dc3545; color: #fff;    border-color: #dc3545; }
+.btn.btn-sm.btn-outline-warning    { background-color: #ffc107; color: #212529; border-color: #ffc107; }
+.btn.btn-sm.btn-outline-secondary  { background-color: #6c757d; color: #fff;    border-color: #6c757d; }
+.btn.btn-sm.btn-outline-purple     { background-color: #6f42c1; color: #fff;    border-color: #6f42c1; }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
+.btn.btn-sm.btn-outline-primary:hover    { background-color: transparent; color: #0d6efd; }
+.btn.btn-sm.btn-outline-success:hover    { background-color: transparent; color: #198754; }
+.btn.btn-sm.btn-outline-danger:hover     { background-color: transparent; color: #dc3545; }
+.btn.btn-sm.btn-outline-warning:hover    { background-color: transparent; color: #ffc107; }
+.btn.btn-sm.btn-outline-secondary:hover  { background-color: transparent; color: #6c757d; }
+.btn.btn-sm.btn-outline-purple:hover     { background-color: transparent; color: #6f42c1; }
