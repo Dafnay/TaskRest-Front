@@ -12,9 +12,6 @@ function TaskRow({ task, onEdit, onDelete, onToggleComplete }) {
     <tr className={task.completed ? 'table-success' : isOverdue ? 'table-danger' : ''}>
       <td className={task.completed ? 'text-decoration-line-through text-muted' : ''}>
         {task.title}
-        {task.description && (
-          <div className="text-muted small">{task.description}</div>
-        )}
       </td>
       <td className="d-none d-md-table-cell">
         {task.category && (

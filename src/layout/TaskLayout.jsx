@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-const isGestor = (role) => role === 'GESTOR' || role === 'ADMIN'
-const isAdmin = (role) => role === 'ADMIN'
 
 function SidebarContent({ currentUser, onLinkClick }) {
   const navLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`
@@ -13,26 +11,6 @@ function SidebarContent({ currentUser, onLinkClick }) {
       <NavLink to="/tasks" className={navLinkClass}>Mis Tareas</NavLink>
       <NavLink to="/tags" className={navLinkClass}>Tags</NavLink>
       <NavLink to="/categories" className={navLinkClass}>Categorías</NavLink>
-
-      {currentUser && isGestor(currentUser.role) && (
-        <>
-          <div className="px-3 pt-3 pb-1 text-uppercase text-muted small fw-semibold">
-            Gestión
-          </div>
-          <NavLink to="/manage/categories" className={navLinkClass}>
-            Gestión de Categorías
-          </NavLink>
-        </>
-      )}
-
-      {currentUser && isAdmin(currentUser.role) && (
-        <>
-          <div className="px-3 pt-3 pb-1 text-uppercase text-muted small fw-semibold">
-            Admin
-          </div>
-          <NavLink to="/admin" className={navLinkClass}>Administración</NavLink>
-        </>
-      )}
     </div>
   )
 }

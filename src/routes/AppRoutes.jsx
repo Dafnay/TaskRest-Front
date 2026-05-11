@@ -4,6 +4,7 @@ import Login from '../pages/Login'
 import Register from '../pages/Register'
 import TaskLayout from '../layout/TaskLayout'
 import TasksPage from '../pages/TasksPage'
+import CategoriesPage from '../pages/CategoriesPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -20,6 +21,11 @@ export default function AppRoutes() {
           <Route path="/tasks" element={
             <PrivateRoute>
               <TaskLayout><TasksPage /></TaskLayout>
+            </PrivateRoute>
+          } />
+          <Route path="/categories" element={
+            <PrivateRoute>
+              <TaskLayout><CategoriesPage /></TaskLayout>
             </PrivateRoute>
           } />
           <Route path="*" element={<Navigate to="/login" />} />
