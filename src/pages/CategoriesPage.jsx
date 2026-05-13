@@ -76,7 +76,7 @@ export default function CategoriesPage() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0 fs-4">Categorías</h2>
         {manage && (
-          <button className="btn btn-primary" onClick={openCreate}>Nueva categoría</button>
+          <button className="btn btn-primary" onClick={openCreate}>Añadir categoría</button>
         )}
       </div>
 
@@ -89,8 +89,8 @@ export default function CategoriesPage() {
           <table className="table table-hover align-middle">
             <thead className="table-light">
               <tr>
-                <th>Nombre</th>
-                {manage && <th>Acciones</th>}
+                <th className="w-100">Nombre</th>
+                {manage && <th className="w-auto">Acciones</th>}
               </tr>
             </thead>
             <tbody>
@@ -98,7 +98,7 @@ export default function CategoriesPage() {
                 <tr key={category.id}>
                   <td>{category.title}</td>
                   {manage && (
-                    <td>
+                    <td className="w-auto text-nowrap">
                       <div className="d-flex gap-1">
                         <button
                           className="btn btn-sm btn-outline-warning"

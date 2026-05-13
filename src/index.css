@@ -123,7 +123,7 @@ code {
 /* ─── Sidebar ──────────────────────────────────────────────────────────────── */
 
 .sidebar {
-  width: 220px;
+  width: 230px;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -136,15 +136,40 @@ code {
   padding: 1.25rem 1.5rem;
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--text-h);
+  color: var(--accent);
   border-bottom: 1px solid var(--border);
   letter-spacing: -0.3px;
 }
 
 .sidebar-nav {
   flex: 1;
-  padding: 1rem 0.75rem;
+  padding: 0.75rem;
 }
+
+.sidebar-nav .nav-link,
+.sidebar-footer .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-nav .nav-link { padding: 0.55rem 0.85rem; }
+.sidebar-footer .nav-link { padding: 0.4rem 0.6rem; font-size: 0.875rem; }
+
+.sidebar-nav .nav-link:hover,
+.sidebar-footer .nav-link:hover,
+.sidebar-nav .nav-link.active,
+.sidebar-footer .nav-link.active {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.sidebar-nav .nav-link.active { font-weight: 600; }
 
 .sidebar-footer {
   padding: 1rem 1.25rem;
@@ -185,6 +210,12 @@ code {
 
 .btn-outline-purple {
   color: #6f42c1;
+  border-color: #6f42c1;
+}
+
+.btn-outline-purple:hover {
+  background-color: #6f42c1;
+  color: #fff;
   border-color: #6f42c1;
 }
 

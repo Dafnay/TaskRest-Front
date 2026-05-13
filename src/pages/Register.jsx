@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { register } from '../api/client'
 import { Link, useNavigate } from 'react-router-dom'
-import heroImg from '../assets/hero.png'
+import registerImg from '../assets/register.avif'
 
 const fields = [
   { key: 'fullname',        label: 'Nombre completo',  type: 'text',     placeholder: 'Ana García' },
@@ -100,8 +100,8 @@ export default function Register() {
         {/* Columna derecha: imagen */}
         <div className="col-12 col-md-6 d-none d-md-block">
           <img
-            src={heroImg}
-            alt="Register visual"
+            src={registerImg}
+            alt="Imagen de un ordenador y una persona trabajando"
             className="w-100 h-100 object-fit-cover"
           />
         </div>
