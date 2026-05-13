@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { getCategories } from '../api/categoryService'
 import { getTags } from '../api/tagService'
+import { STATUS_LABELS, PRIORITY_LABELS } from '../constants/task'
 
 const emptyForm = {
   title: '',
   description: '',
   deadline: '',
+  status: 'PENDING',
+  priority: '',
+  notes: '',
   categoryId: '',
   tagIds: [],
-  completed: false,
 }
 
 export default function TaskFormModal({ show, onClose, onSave, task = null }) {
@@ -34,9 +37,11 @@ export default function TaskFormModal({ show, onClose, onSave, task = null }) {
         title: task.title ?? '',
         description: task.description ?? '',
         deadline: task.deadline ? task.deadline.slice(0, 16) : '',
+        status: task.status ?? 'PENDING',
+        priority: task.priority ?? '',
+        notes: task.notes ?? '',
         categoryId: task.category?.id ?? '',
         tagIds: task.tags?.map(t => t.id) ?? [],
-        completed: task.completed ?? false,
       })
     } else {
       setForm(emptyForm)
@@ -67,9 +72,11 @@ export default function TaskFormModal({ show, onClose, onSave, task = null }) {
         title: form.title,
         description: form.description || null,
         deadline: form.deadline ? `${form.deadline}:00` : null,
+        status: form.status,
+        priority: form.priority || null,
+        notes: form.notes || null,
         categoryId: form.categoryId || null,
         tagIds: form.tagIds,
-        completed: form.completed,
       })
       onClose()
     } catch (err) {
@@ -146,6 +153,47 @@ export default function TaskFormModal({ show, onClose, onSave, task = null }) {
                   </div>
                 </div>
 
+                <div className="row mb-3">
+                  <div className="col-md-6">
+                    <label className="form-label">Estado</label>
+                    <select
+                      name="status"
+                      className="form-select"
+                      value={form.status}
+                      onChange={handleChange}
+                    >
+                      {Object.entries(STATUS_LABELS).map(([v, l]) => (
+                        <option key={v} value={v}>{l}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Prioridad</label>
+                    <select
+                      name="priority"
+                      className="form-select"
+                      value={form.priority}
+                      onChange={handleChange}
+                    >
+                      <option value="">Sin prioridad</option>
+                      {Object.entries(PRIORITY_LABELS).map(([v, l]) => (
+                        <option key={v} value={v}>{l}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Notas</label>
+                  <textarea
+                    name="notes"
+                    className="form-control"
+                    rows={2}
+                    value={form.notes}
+                    onChange={handleChange}
+                  />
+                </div>
+
                 {tags.length > 0 && (
                   <div className="mb-3">
                     <label className="form-label">Tags</label>
@@ -165,22 +213,6 @@ export default function TaskFormModal({ show, onClose, onSave, task = null }) {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
-
-                {task && (
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="completed"
-                      name="completed"
-                      checked={form.completed}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="completed">
-                      Tarea completada
-                    </label>
                   </div>
                 )}
               </div>

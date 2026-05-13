@@ -1,24 +1,18 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getTasks, createTask, updateTask, deleteTask } from "../api/taskService";
+import { getTasks, createTask, updateTask, deleteTask, searchTasks, searchByStatus } from "../api/taskService";
 import TaskFormModal from "../components/TaskFormModal";
 import { useConfirm } from "../hooks/useConfirm";
+import { STATUS_LABELS, STATUS_BADGE, PRIORITY_LABELS, PRIORITY_BADGE } from "../constants/task";
 
-function TaskRow({ task, onEdit, onDelete, onToggleComplete }) {
+function TaskRow({ task, onEdit, onDelete, onStatusChange }) {
   const deadline = task.deadline ? new Date(task.deadline) : null;
-  const isOverdue = deadline && !task.completed && deadline < new Date();
+  const isCompleted = task.status === 'COMPLETED';
+  const isOverdue = deadline && !isCompleted && deadline < new Date();
 
   return (
-    <tr
-      className={
-        task.completed ? "table-success" : isOverdue ? "table-danger" : ""
-      }
-    >
-      <td
-        className={
-          task.completed ? "text-decoration-line-through text-muted" : ""
-        }
-      >
+    <tr className={isCompleted ? "table-success" : isOverdue ? "table-danger" : ""}>
+      <td className={isCompleted ? "text-decoration-line-through text-muted" : ""}>
         {task.title}
       </td>
       <td className="d-none d-md-table-cell">
@@ -29,29 +23,31 @@ function TaskRow({ task, onEdit, onDelete, onToggleComplete }) {
       <td className="d-none d-md-table-cell">
         <div className="d-flex flex-wrap gap-1">
           {task.tags?.map((tag) => (
-            <span key={tag.id} className="badge bg-secondary">
-              {tag.name}
-            </span>
+            <span key={tag.id} className="badge bg-secondary">{tag.name}</span>
           ))}
         </div>
       </td>
       <td className={isOverdue ? "text-danger fw-semibold" : ""}>
         {deadline ? deadline.toLocaleDateString("es-ES") : "—"}
       </td>
+      <td className="d-none d-md-table-cell">
+        <select
+          className="form-select form-select-sm"
+          value={task.status}
+          onChange={e => onStatusChange(task, e.target.value)}
+        >
+          {Object.entries(STATUS_LABELS).map(([v, l]) => (
+            <option key={v} value={v}>{l}</option>
+          ))}
+        </select>
+      </td>
+      <td className="d-none d-md-table-cell">
+        {task.priority
+          ? <span className={`badge ${PRIORITY_BADGE[task.priority]}`}>{PRIORITY_LABELS[task.priority]}</span>
+          : '—'}
+      </td>
       <td>
         <div className="d-flex gap-1">
-          <button
-            className={`btn btn-sm ${task.completed ? "btn-success" : "btn-outline-success"}`}
-            onClick={() => onToggleComplete(task)}
-            title={task.completed ? "Desmarcar" : "Completar"}
-          >
-            <i
-              className={`bi ${task.completed ? "bi-check-circle-fill" : "bi-check-circle"}`}
-            />
-            <span className="d-none d-md-inline ms-1">
-              {task.completed ? "Completada" : "Completar"}
-            </span>
-          </button>
           <button
             className="btn btn-sm btn-outline-warning"
             onClick={() => onEdit(task)}
@@ -81,6 +77,9 @@ export default function TasksPage() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterPriority, setFilterPriority] = useState('');
+  const [search, setSearch] = useState('');
   const { confirm, modal: confirmModal } = useConfirm();
 
   useEffect(() => {
@@ -89,6 +88,25 @@ export default function TasksPage() {
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search.trim() === '') {
+        getTasks(getAuthHeader()).then(setTasks).catch(() => {});
+      } else {
+        searchTasks(getAuthHeader(), search.trim()).then(setTasks).catch(() => {});
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    if (filterStatus === '') {
+      getTasks(getAuthHeader()).then(setTasks).catch(() => {});
+    } else {
+      searchByStatus(getAuthHeader(), filterStatus).then(setTasks).catch(() => {});
+    }
+  }, [filterStatus]);
 
   const openCreate = () => {
     setEditingTask(null);
@@ -100,17 +118,19 @@ export default function TasksPage() {
     setShowModal(true);
   };
 
-  const handleToggleComplete = async (task) => {
+  const handleStatusChange = async (task, newStatus) => {
     try {
       const updated = await updateTask(getAuthHeader(), task.id, {
         title: task.title,
         description: task.description ?? null,
         deadline: task.deadline ?? null,
+        status: newStatus,
+        priority: task.priority ?? null,
+        notes: task.notes ?? null,
         categoryId: task.category?.id ?? null,
-        tagIds: task.tags?.map((t) => t.id) ?? [],
-        completed: !task.completed,
+        tagIds: task.tags?.map(t => t.id) ?? [],
       });
-      setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+      setTasks(prev => prev.map(t => t.id === updated.id ? updated : t));
     } catch (e) {
       alert(e.message);
     }
@@ -130,8 +150,7 @@ export default function TasksPage() {
   const handleDelete = async (id) => {
     const ok = await confirm({
       title: "Eliminar tarea",
-      message:
-        "¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.",
+      message: "¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.",
       confirmLabel: "Eliminar",
     });
     if (!ok) return;
@@ -142,6 +161,9 @@ export default function TasksPage() {
       alert(e.message);
     }
   };
+
+  const filtered = tasks
+    .filter(t => !filterPriority || t.priority === filterPriority);
 
   if (loading)
     return (
@@ -156,16 +178,46 @@ export default function TasksPage() {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="mb-0 fs-4">Mis Tareas</h2>
         <button className="btn btn-primary" onClick={openCreate}>
           Nueva tarea
         </button>
       </div>
 
-      {tasks.length === 0 ? (
+      <div className="d-flex gap-2 mb-3 flex-wrap">
+        <input
+          type="search"
+          className="form-control form-control-sm w-auto"
+          placeholder="Buscar por título..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+        <select
+          className="form-select form-select-sm w-auto"
+          value={filterStatus}
+          onChange={e => setFilterStatus(e.target.value)}
+        >
+          <option value="">Todos los estados</option>
+          {Object.entries(STATUS_LABELS).map(([v, l]) => (
+            <option key={v} value={v}>{l}</option>
+          ))}
+        </select>
+        <select
+          className="form-select form-select-sm w-auto"
+          value={filterPriority}
+          onChange={e => setFilterPriority(e.target.value)}
+        >
+          <option value="">Todas las prioridades</option>
+          {Object.entries(PRIORITY_LABELS).map(([v, l]) => (
+            <option key={v} value={v}>{l}</option>
+          ))}
+        </select>
+      </div>
+
+      {filtered.length === 0 ? (
         <div className="text-center py-5 text-muted">
-          <p>No tienes tareas todavía.</p>
+          <p>{tasks.length === 0 ? 'No tienes tareas todavía.' : 'No hay tareas con los filtros seleccionados.'}</p>
         </div>
       ) : (
         <div className="table-responsive">
@@ -176,17 +228,19 @@ export default function TasksPage() {
                 <th className="d-none d-md-table-cell">Categoría</th>
                 <th className="d-none d-md-table-cell">Tags</th>
                 <th>Fecha límite</th>
+                <th className="d-none d-md-table-cell">Estado</th>
+                <th className="d-none d-md-table-cell">Prioridad</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {tasks.map((task) => (
+              {filtered.map((task) => (
                 <TaskRow
                   key={task.id}
                   task={task}
                   onEdit={openEdit}
                   onDelete={handleDelete}
-                  onToggleComplete={handleToggleComplete}
+                  onStatusChange={handleStatusChange}
                 />
               ))}
             </tbody>

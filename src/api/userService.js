@@ -6,3 +6,4 @@ export const editUser = (auth, id, data) => apiFetch(`/admin/users/${id}`, auth,
 export const deleteUser = (auth, id) => apiFetch(`/admin/users/${id}`, auth, { method: 'DELETE' })
 export const promoteUser = (auth, id) => apiFetch(`/admin/users/${id}/promote`, auth, { method: 'PATCH' })
 export const demoteUser = (auth, id) => apiFetch(`/admin/users/${id}/demote`, auth, { method: 'PATCH' })
+export const updateProfile = (auth, data) => apiFetch('/user/profile', auth, { method: 'PUT', body: JSON.stringify(data) })

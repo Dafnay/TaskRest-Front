@@ -34,8 +34,18 @@ export function AuthProvider({ children }) {
     return { Authorization: `Basic ${currentUser.authHeader}` }
   }
 
+  const updateCurrentUser = (updatedData, newPassword) => {
+    const currentDecoded = atob(currentUser.authHeader)
+    const currentPassword = currentDecoded.split(':').slice(1).join(':')
+    const password = newPassword || currentPassword
+    const encoded = btoa(`${updatedData.username}:${password}`)
+    const user = { ...updatedData, authHeader: encoded }
+    sessionStorage.setItem('currentUser', JSON.stringify(user))
+    setCurrentUser(user)
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!currentUser, currentUser, login, logout, getAuthHeader }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!currentUser, currentUser, login, logout, getAuthHeader, updateCurrentUser }}>
       {children}
     </AuthContext.Provider>
   )

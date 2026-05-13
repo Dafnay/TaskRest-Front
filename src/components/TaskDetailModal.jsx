@@ -1,3 +1,5 @@
+import { STATUS_LABELS, STATUS_BADGE, PRIORITY_LABELS, PRIORITY_BADGE } from '../constants/task'
+
 export default function TaskDetailModal({ show, onClose, task }) {
   if (!show || !task) return null
   const deadline = task.deadline
@@ -31,10 +33,18 @@ export default function TaskDetailModal({ show, onClose, task }) {
                 <dd className="col-8">{deadline}</dd>
                 <dt className="col-4">Estado</dt>
                 <dd className="col-8">
-                  <span className={`badge ${task.completed ? 'bg-success' : 'bg-warning text-dark'}`}>
-                    {task.completed ? 'Completada' : 'Pendiente'}
+                  <span className={`badge ${STATUS_BADGE[task.status] ?? 'bg-secondary'}`}>
+                    {STATUS_LABELS[task.status] ?? task.status}
                   </span>
                 </dd>
+                <dt className="col-4">Prioridad</dt>
+                <dd className="col-8">
+                  {task.priority
+                    ? <span className={`badge ${PRIORITY_BADGE[task.priority] ?? 'bg-secondary'}`}>{PRIORITY_LABELS[task.priority] ?? task.priority}</span>
+                    : '—'}
+                </dd>
+                <dt className="col-4">Notas</dt>
+                <dd className="col-8">{task.notes || '—'}</dd>
               </dl>
             </div>
             <div className="modal-footer">

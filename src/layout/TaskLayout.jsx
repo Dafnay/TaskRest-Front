@@ -3,9 +3,9 @@ import { useAuth } from '../context/AuthContext'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 
-function SidebarContent({ currentUser, onLinkClick }) {
-  const navLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`
+const navLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`
 
+function SidebarContent({ currentUser, onLinkClick }) {
   return (
     <div className="nav flex-column nav-pills" onClick={onLinkClick}>
       {currentUser?.role !== 'ADMIN' && (
@@ -71,11 +71,14 @@ export default function TaskLayout({ children }) {
 
           {currentUser && (
             <div className="sidebar-footer">
-              <div className="mb-2">
-                <strong className="d-block">{currentUser.username}</strong>
-                <span className="badge bg-secondary">{currentUser.role}</span>
+              <div className="d-flex align-items-center justify-content-between mb-1">
+                <strong className="text-truncate me-2">{currentUser.username}</strong>
+                <span className="badge bg-secondary flex-shrink-0">{currentUser.role}</span>
               </div>
-              <button className="btn btn-sm btn-outline-danger w-100" onClick={handleLogout}>
+              <NavLink to="/profile" className={navLinkClass} onClick={closeSidebar}>
+                Perfil
+              </NavLink>
+              <button className="btn btn-sm btn-outline-danger w-100 mt-2" onClick={handleLogout}>
                 Cerrar sesión
               </button>
             </div>

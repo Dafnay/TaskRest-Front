@@ -7,6 +7,7 @@ import TasksPage from '../pages/TasksPage'
 import CategoriesPage from '../pages/CategoriesPage'
 import TagsPage from '../pages/TagsPage'
 import UsersPage from '../pages/UsersPage'
+import ProfilePage from '../pages/ProfilePage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -53,6 +54,11 @@ export default function AppRoutes() {
             <AdminOnlyRoute>
               <TaskLayout><UsersPage /></TaskLayout>
             </AdminOnlyRoute>
+          } />
+          <Route path="/profile" element={
+            <PrivateRoute>
+              <TaskLayout><ProfilePage /></TaskLayout>
+            </PrivateRoute>
           } />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
