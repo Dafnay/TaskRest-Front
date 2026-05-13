@@ -70,7 +70,7 @@ export default function TagsPage() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0 fs-4">Tags</h2>
-        <button className="btn btn-primary" onClick={openCreate}>Nuevo tag</button>
+        <button className="btn btn-primary" onClick={openCreate}>Añadir tag</button>
       </div>
 
       {tags.length === 0 ? (
@@ -82,15 +82,15 @@ export default function TagsPage() {
           <table className="table table-hover align-middle">
             <thead className="table-light">
               <tr>
-                <th>Nombre</th>
-                <th>Acciones</th>
+                <th className="w-100">Nombre</th>
+                <th className="w-auto">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {tags.map(tag => (
                 <tr key={tag.id}>
                   <td><span className="badge bg-secondary fs-6">{tag.name}</span></td>
-                  <td>
+                  <td className="w-auto text-nowrap">
                     <div className="d-flex gap-1">
                       <button
                         className="btn btn-sm btn-outline-warning"

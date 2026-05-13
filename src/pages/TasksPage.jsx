@@ -181,38 +181,84 @@ export default function TasksPage() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="mb-0 fs-4">Mis Tareas</h2>
         <button className="btn btn-primary" onClick={openCreate}>
-          Nueva tarea
+          Añadir tarea
         </button>
       </div>
 
-      <div className="d-flex gap-2 mb-3 flex-wrap">
-        <input
-          type="search"
-          className="form-control form-control-sm w-auto"
-          placeholder="Buscar por título..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <select
-          className="form-select form-select-sm w-auto"
-          value={filterStatus}
-          onChange={e => setFilterStatus(e.target.value)}
-        >
-          <option value="">Todos los estados</option>
-          {Object.entries(STATUS_LABELS).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
-        </select>
-        <select
-          className="form-select form-select-sm w-auto"
-          value={filterPriority}
-          onChange={e => setFilterPriority(e.target.value)}
-        >
-          <option value="">Todas las prioridades</option>
-          {Object.entries(PRIORITY_LABELS).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
-        </select>
+      <div className="card border-0 bg-light rounded-3 mb-3">
+        <div className="card-body py-2 px-3">
+          <div className="row g-2 align-items-center">
+            <div className="col-12 col-md-6">
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <i className="bi bi-search" />
+                </span>
+                <input
+                  type="search"
+                  className="form-control bg-white border-start-0 ps-0"
+                  placeholder="Buscar por título..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-6 col-md-3">
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <i className="bi bi-funnel" />
+                </span>
+                <select
+                  className="form-select bg-white border-start-0"
+                  value={filterStatus}
+                  onChange={e => setFilterStatus(e.target.value)}
+                >
+                  <option value="">Todos los estados</option>
+                  {Object.entries(STATUS_LABELS).map(([v, l]) => (
+                    <option key={v} value={v}>{l}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="col-6 col-md-3">
+              <div className="input-group input-group-sm">
+                <span className="input-group-text bg-white border-end-0 text-muted">
+                  <i className="bi bi-flag" />
+                </span>
+                <select
+                  className="form-select bg-white border-start-0"
+                  value={filterPriority}
+                  onChange={e => setFilterPriority(e.target.value)}
+                >
+                  <option value="">Todas las prioridades</option>
+                  {Object.entries(PRIORITY_LABELS).map(([v, l]) => (
+                    <option key={v} value={v}>{l}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {(search || filterStatus || filterPriority) && (
+              <div className="col-12 d-flex justify-content-end">
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() => { setSearch(''); setFilterStatus(''); setFilterPriority(''); }}
+                  title="Limpiar filtros"
+                >
+                  <i className="bi bi-x-circle me-1" />
+                  Limpiar
+                </button>
+              </div>
+            )}
+          </div>
+
+          {(search || filterStatus || filterPriority) && (
+            <p className="mb-0 mt-2 small text-muted">
+              {filtered.length} {filtered.length === 1 ? 'tarea encontrada' : 'tareas encontradas'}
+            </p>
+          )}
+        </div>
       </div>
 
       {filtered.length === 0 ? (

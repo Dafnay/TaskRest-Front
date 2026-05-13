@@ -21,3 +21,20 @@ export const PRIORITY_BADGE = {
   MEDIUM: 'bg-info text-dark',
   HIGH: 'bg-warning text-dark',
 }
+
+export const STATUS_COLORS = {
+  PENDING: '#ffc107',
+  IN_PROGRESS: '#0dcaf0',
+  COMPLETED: '#198754',
+}
+
+export const PRIORITY_COLORS = {
+  LOW: '#6c757d',
+  MEDIUM: '#0dcaf0',
+  HIGH: '#ffc107',
+}
+
+export const CHART_PALETTE = [
+  '#aa3bff', '#0d6efd', '#198754', '#ffc107',
+  '#0dcaf0', '#fd7e14', '#d63384', '#20c997',
+]

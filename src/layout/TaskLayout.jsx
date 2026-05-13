@@ -7,18 +7,21 @@ const navLinkClass = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`
 
 function SidebarContent({ currentUser, onLinkClick }) {
   return (
-    <div className="nav flex-column nav-pills" onClick={onLinkClick}>
+    <div className="d-flex flex-column gap-1" onClick={onLinkClick}>
       {currentUser?.role !== 'ADMIN' && (
         <>
-          <NavLink to="/tasks" className={navLinkClass}>Mis Tareas</NavLink>
-          <NavLink to="/tags" className={navLinkClass}>Tags</NavLink>
+          <NavLink to="/dashboard" className={navLinkClass}><i className="bi bi-speedometer2" />Dashboard</NavLink>
+          <NavLink to="/tasks" className={navLinkClass}><i className="bi bi-list-check" />Mis Tareas</NavLink>
+          <NavLink to="/categories" className={navLinkClass}><i className="bi bi-tag" />Categorías</NavLink>
+          <NavLink to="/tags" className={navLinkClass}><i className="bi bi-hash" />Tags</NavLink>
         </>
       )}
       {currentUser?.role === 'ADMIN' && (
-        <NavLink to="/users" className={navLinkClass}>Usuarios</NavLink>
+        <>
+          <NavLink to="/users" className={navLinkClass}><i className="bi bi-people" />Usuarios</NavLink>
+          <NavLink to="/categories" className={navLinkClass}><i className="bi bi-tag" />Categorías</NavLink>
+        </>
       )}
-      <NavLink to="/categories" className={navLinkClass}>Categorías</NavLink>
-      
     </div>
   )
 }
@@ -71,12 +74,12 @@ export default function TaskLayout({ children }) {
 
           {currentUser && (
             <div className="sidebar-footer">
-              <div className="d-flex align-items-center justify-content-between mb-1">
+              <div className="d-flex align-items-center justify-content-between mb-1 px-2">
                 <strong className="text-truncate me-2">{currentUser.username}</strong>
                 <span className="badge bg-secondary flex-shrink-0">{currentUser.role}</span>
               </div>
               <NavLink to="/profile" className={navLinkClass} onClick={closeSidebar}>
-                Perfil
+                <i className="bi bi-person-circle" />Perfil
               </NavLink>
               <button className="btn btn-sm btn-outline-danger w-100 mt-2" onClick={handleLogout}>
                 Cerrar sesión

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import heroImg from '../assets/hero.png'
+import loginImg from '../assets/login.avif'
 
 const fields = [
   { key: 'username', label: 'Usuario',    type: 'text',     placeholder: 'anagarcia' },
@@ -49,8 +49,8 @@ export default function Login() {
         {/* Columna izquierda: imagen */}
         <div className="col-12 col-md-6 d-none d-md-block">
           <img
-            src={heroImg}
-            alt="Login visual"
+            src={loginImg}
+            alt="Imagen de un cuaderno con unas gafas encima y un cafe"
             className="w-100 h-100 object-fit-cover"
           />
         </div>
@@ -89,7 +89,7 @@ export default function Login() {
 
               {apiError && <div className="alert alert-danger py-2 mb-3">{apiError}</div>}
 
-              <button type="submit" className="btn btn-primary w-100 mt-2">
+              <button type="submit" className="btn btn-outline-purple w-100 mt-2">
                 Entrar
               </button>
 
